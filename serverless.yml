@@ -31,6 +31,20 @@ provider:
   runtime: nodejs6.10
   stage: prod
   region: us-east-1
+  
+  # 'iamRoleStatement' defines the permission policy for the Lambda function.
+  # In this case Lambda functions are granted with permissions to access DynamoDB.
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-east-1:*:*"
 
 # you can overwrite defaults here
 #  stage: dev
@@ -66,8 +80,22 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
+  # Defines an HTTP API endpoint that calls the main function in create.js
+  # - path: url path is /notes
+  # - method: POST request
+  # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
+  #     domain api call
+  # - authorizer: authenticate the api via Cognito User Pool. Update the 'arn'
+  #     with your own User Pool ARN
+  create:
+    handler: create.main
+    events:
+      - http:
+          path: notes
+          method: post
+          cors: true
+          authorizer:
+            arn: "arn:aws:cognito-identity:us-east-1:115243183655:identitypool/us-east-1:16f1d3ff-d3ef-4a10-9120-a24f04b22969"
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
