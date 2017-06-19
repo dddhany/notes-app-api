@@ -68,27 +68,20 @@
 	                    case 0:
 	                        params = {
 	                            TableName: 'notes',
-	                            // 'Key' defines the partition key and sort key of the item to be retrieved
-	                            // - 'userId': federated identity ID of the authenticated user
-	                            // - 'noteId': path parameter
-	                            Key: {
-	                                userId: event.requestContext.authorizer.claims.sub,
-	                                noteId: event.pathParameters.id
+	                            KeyConditionExpression: "userId = :userId",
+	                            ExpressionAttributeValues: {
+	                                ":userId": event.requestContext.authorizer.claims.sub
 	                            }
 	                        };
 	                        _context.prev = 1;
 	                        _context.next = 4;
-	                        return dynamoDbLib.call('get', params);
+	                        return dynamoDbLib.call('query', params);
 
 	                    case 4:
 	                        result = _context.sent;
 
-	                        if (result.Item) {
-	                            // Return the retrieved item
-	                            callback(null, (0, _responseLib.success)(result.Item));
-	                        } else {
-	                            callback(null, (0, _responseLib.failure)({ status: false, error: 'Item not found.' }));
-	                        }
+	                        // Return the matching list of items in response body
+	                        callback(null, (0, _responseLib.success)(result.Items));
 	                        _context.next = 11;
 	                        break;
 

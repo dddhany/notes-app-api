@@ -24,4 +24,4 @@ export async function main(event, context, callback) {
     } catch (e) {
         callback(null, failure({status: false}))
     }
-}
+};
