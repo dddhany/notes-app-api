@@ -96,7 +96,18 @@ functions:
           cors: true
           authorizer:
             arn: "arn:aws:cognito-identity:us-east-1:115243183655:identitypool/us-east-1:16f1d3ff-d3ef-4a10-9120-a24f04b22969"
-
+  get:
+    # Defines an HTTP API endpoint that calls the main function in get.js
+    # - path: url path is /notes/{id}
+    # - method: GET request
+    handler: get.main
+    events:
+      - http:
+          path: notes/{id}
+          method: get
+          cors: true
+          authorizer:
+            arn: "arn:aws:cognito-identity:us-east-1:115243183655:identitypool/us-east-1:16f1d3ff-d3ef-4a10-9120-a24f04b22969"
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
