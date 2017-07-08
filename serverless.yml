@@ -31,6 +31,8 @@ provider:
   runtime: nodejs6.10
   stage: prod
   region: us-east-1
+  environment:
+    ARN_COGNITO_USERPOOL: arn:aws:cognito-idp:us-east-1:115243183655:userpool/us-east-1_y3TW6m8XP
   
   # 'iamRoleStatement' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
@@ -95,7 +97,8 @@ functions:
           method: post
           cors: true
           authorizer:
-            arn: "arn:aws:cognito-identity:us-east-1:115243183655:identitypool/us-east-1:16f1d3ff-d3ef-4a10-9120-a24f04b22969"
+            arn: ${self:provider.environment.ARN_COGNITO_USERPOOL}
+
   get:
     # Defines an HTTP API endpoint that calls the main function in get.js
     # - path: url path is /notes/{id}
@@ -107,7 +110,8 @@ functions:
           method: get
           cors: true
           authorizer:
-            arn: "arn:aws:cognito-identity:us-east-1:115243183655:identitypool/us-east-1:16f1d3ff-d3ef-4a10-9120-a24f04b22969"
+            arn: ${self:provider.environment.ARN_COGNITO_USERPOOL}
+            
   list:
     # Defines an HTTP API endpoint that calls the main function in list.js
     # - path: url path is /notes
@@ -119,7 +123,8 @@ functions:
           method: get
           cors: true
           authorizer:
-            arn: "arn:aws:cognito-identity:us-east-1:115243183655:identitypool/us-east-1:16f1d3ff-d3ef-4a10-9120-a24f04b22969"
+            arn: ${self:provider.environment.ARN_COGNITO_USERPOOL}
+
   update:
     # Defines an HTTP API endpoint that calls the main function in update.js
     # - path: url path is /notes/{id}
@@ -131,7 +136,8 @@ functions:
           method: put
           cors: true
           authorizer:
-            arn: "arn:aws:cognito-identity:us-east-1:115243183655:identitypool/us-east-1:16f1d3ff-d3ef-4a10-9120-a24f04b22969"
+            arn: ${self:provider.environment.ARN_COGNITO_USERPOOL}
+
   delete:
     # Defines an HTTP API endpoint that calls the main function in delete.js
     # - path: url path is /notes/{id}
@@ -143,7 +149,8 @@ functions:
           method: delete
           cors: true
           authorizer:
-            arn: "arn:aws:cognito-identity:us-east-1:115243183655:identitypool/us-east-1:16f1d3ff-d3ef-4a10-9120-a24f04b22969"
+            arn: ${self:provider.environment.ARN_COGNITO_USERPOOL}
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
